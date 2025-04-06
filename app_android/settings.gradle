@@ -1,0 +1,14 @@
+pluginManagement {
+    repositories {
+        google()
+        gradlePluginPortal()
+        mavenCentral()
+    }
+
+    plugins {
+        id("org.jetbrains.kotlin.android") version "1.9.0"
+    }
+}
+
+rootProject.name = "app_android"
+include(":app")
