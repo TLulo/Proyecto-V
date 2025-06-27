@@ -12,3 +12,4 @@ plugins {
 
 rootProject.name = "app_gyroscope"
 include("app")
+include("Menu")
