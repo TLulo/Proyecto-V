@@ -1,4 +1,4 @@
-package com.app.gyroscope
+package com.app.gyros
 
 import org.junit.Test
 

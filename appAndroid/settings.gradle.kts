@@ -19,5 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Gyroscope"
+rootProject.name = "gyros"
 include(":app")
+ 
