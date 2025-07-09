@@ -4,8 +4,9 @@ import android.hardware.Sensor
 import android.hardware.SensorManager
 import io.mockk.every
 import io.mockk.mockk
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.junit.Assert.*
 
 class GyroscopeTest {
     @Test

@@ -2,11 +2,11 @@ package com.app.gyros.Sensors
 
 import android.hardware.Sensor
 import android.hardware.SensorManager
-import org.junit.Test
-//import org.junit.jupiter.api.Assertions.*
-import io.mockk.mockk
 import io.mockk.every
-import org.junit.Assert.*
+import io.mockk.mockk
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Test
 
 class AccelerometerTest {
 

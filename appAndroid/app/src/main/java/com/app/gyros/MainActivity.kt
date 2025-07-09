@@ -14,12 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-
-import com.app.gyros.Sensors.*
+import com.app.gyros.Sensors.Accelerometer
+import com.app.gyros.Sensors.Gyroscope
 import com.app.gyros.ui.theme.GyrosTheme
 
 class MainActivity : ComponentActivity() {
@@ -48,9 +45,12 @@ fun Detected(context: Context, modifier: Modifier = Modifier){
     Surface() {
         Box(Modifier.fillMaxSize(),contentAlignment = Alignment.Center){
             Text(
-                text = (if (accelerometer.detectSensor()) "El usuario tiene Accelerometro" else "El usuario no tiene acelerometro") + "\n" +
-                        (if (gyroscope.detectSensor()) "El usuario tiene Gyroscopio" else "El usuario no tiene Gyroscopio"),
-                modifier = modifier.padding(50  .dp)
+                text = (if (accelerometer.detectSensor()) "The user Has a Accelerometer"
+                            else "The user Hasn't a Accelerometer")
+                        + "\n" +
+                        (if (gyroscope.detectSensor()) "The user Has a Gyroscope"
+                            else "The user Hasn't a Gyroscope"),
+                modifier = modifier.padding(50.dp)
             )
         }
     }
