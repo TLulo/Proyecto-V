@@ -1,6 +1,7 @@
 package com.app.gyros
 
 import android.content.Context
+import android.hardware.SensorManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -40,8 +41,9 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Detected(context: Context, modifier: Modifier = Modifier){
-    val accelerometer = Accelerometer(context)
-    val gyroscope = Gyroscope(context)
+    val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    val accelerometer = Accelerometer(sensorManager)
+    val gyroscope = Gyroscope(sensorManager)
 
     Surface() {
         Box(Modifier.fillMaxSize(),contentAlignment = Alignment.Center){
