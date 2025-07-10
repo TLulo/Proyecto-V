@@ -72,11 +72,13 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         accelerometer.start()
+        gyroscope.start()
     }
 
     override fun onStop() {
         super.onStop()
         accelerometer.stop()
+        gyroscope.stop()
     }
 }
 
@@ -95,7 +97,7 @@ fun SensorScreen(viewModel: SensorViewModel, sensor: AbstractSensor) {
             Text("Y: $y")
             Text("Z: $z")
         }else{
-            Text("No tienes el Sensor requerido (No deberias ver esto)")
+            Text("Your device hasn't required Sensor")
         }
     }
 }
