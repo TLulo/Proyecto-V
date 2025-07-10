@@ -3,10 +3,13 @@ package com.app.gyros.Sensors
 import android.hardware.Sensor
 import android.hardware.SensorManager
 
-class Gyroscope(private val sensorManager: SensorManager): AbstractSensor() {
+class Gyroscope(protected val sensorMan: SensorManager): AbstractSensor(sensorMan) {
 
     override fun detectSensor(): Boolean {
-        return (sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null)
+        return ( hasTypeSensor() != null)
     }
 
+    override fun hasTypeSensor(): Sensor? {
+        return (sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE))
+    }
 }

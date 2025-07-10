@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.app.gyros.Sensors.AbstractSensor
 import com.app.gyros.Sensors.Accelerometer
 import com.app.gyros.Sensors.Gyroscope
 import com.app.gyros.Sensors.Utils.SensorViewModel
@@ -31,7 +33,10 @@ class MainActivity : ComponentActivity() {
 
         val sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         accelerometer = Accelerometer(sensorManager)
-        accelerometer.setViewModel(sensorViewModel)
+        accelerometer.initializeViewModel(sensorViewModel)
+
+        gyroscope = Gyroscope(sensorManager)
+        gyroscope.initializeViewModel(sensorViewModel)
 
         setContent {
             GyrosTheme {
@@ -40,7 +45,8 @@ class MainActivity : ComponentActivity() {
                     color = Color.White,
                 ){
                 }
-                SensorScreen(sensorViewModel)
+                SensorScreen(sensorViewModel,accelerometer)
+                SensorScreen(sensorViewModel,gyroscope)
             }
         }
     }
@@ -57,16 +63,21 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun SensorScreen(viewModel: SensorViewModel) {
+fun SensorScreen(viewModel: SensorViewModel, sensor: AbstractSensor) {
     val (x, y, z) = viewModel.SensorValues
 
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Sensor:")
-        Text("X: $x")
-        Text("Y: $y")
-        Text("Z: $z")
+        if (sensor.detectSensor()){
+            Text("Sensor:")
+            Text("X: $x")
+            Text("Y: $y")
+            Text("Z: $z")
+        }else{
+            Text("No tienes el Sensor requerido (No deberias ver esto)")
+        }
     }
 }
