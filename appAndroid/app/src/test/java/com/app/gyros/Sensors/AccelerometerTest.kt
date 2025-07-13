@@ -1,9 +1,14 @@
 package com.app.gyros.Sensors
 
 import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import androidx.lifecycle.ViewModel
+import com.app.gyros.Sensors.Utils.SensorViewModel
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Assert.assertEquals
@@ -63,6 +68,81 @@ class AccelerometerTest {
         val result = accelerometer.detectSensor()
 
         assertFalse(result)
+    }
+
+    @Test
+    fun `testGetAndSetViewModel return setViewModel`() {
+        val mockViewModel = mockk<SensorViewModel>()
+        val mockSensorManager = mockk<SensorManager>()
+
+        val accelerometer = Accelerometer(mockSensorManager)
+
+        accelerometer.initializeViewModel(mockViewModel)
+
+        assertEquals(accelerometer.getViewModel(),mockViewModel)
+    }
+
+    @Test
+    fun `start register listener  when sensor exists`() {
+        val mockSensorManager = mockk<SensorManager>()
+        val mockSensor = mockk<Sensor>()
+
+        every { mockSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) } returns mockSensor
+
+        val accelerometer = Accelerometer(mockSensorManager)
+        accelerometer.start()
+
+        verify{
+            mockSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+            mockSensorManager.registerListener(any(),mockSensor,SensorManager.SENSOR_DELAY_GAME)
+        }
+    }
+
+    @Test
+    fun `start does not register listener when sensor does not exists`() {
+        val mockSensorManager = mockk<SensorManager>()
+
+        every { mockSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) } returns null
+
+        val accelerometer = Accelerometer(mockSensorManager)
+        accelerometer.start()
+
+        verify(exactly = 1) {
+            mockSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        }
+
+        verify(exactly = 0) {
+            mockSensorManager.registerListener(any<SensorEventListener>(),any<Sensor>(),any<Int>())
+        }
+    }
+
+    @Test
+    fun `stop register listener`() {
+        val mockSensorManager = mockk<SensorManager>()
+        val mockSensor = mockk<Sensor>()
+
+        val accelerometer = Accelerometer(mockSensorManager)
+
+        verify {
+            mockSensorManager.unregisterListener(any<SensorEventListener>())
+        }
+    }
+
+    @Test
+    fun `onSensorChanged processes sensor values correctly`() {
+        val mockSensorManager = mockk<SensorManager>()
+        val mockViewModel = mockk<SensorViewModel>(relaxed = true)
+
+        val accelerometter = Accelerometer(mockSensorManager)
+        val mockEvent = mockk<SensorEvent>()
+
+        every { mockEvent.values } returns floatArrayOf(23.0f,54.0f,128.0f)
+
+        accelerometter.onSensorChanged(mockEvent)
+
+        verify {
+            mockViewModel.updateValues(23.0f, 54.0f, 128.0f)
+        }
     }
 
 }
