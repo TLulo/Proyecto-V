@@ -1,7 +1,7 @@
 package com.app.gyros.Sensors.Utils
 
-import org.junit.Test
 import org.junit.Assert.assertEquals
+import org.junit.Test
 
 class SensorViewModelTest {
 
