@@ -7,6 +7,7 @@ import android.hardware.SensorManager
 import androidx.lifecycle.ViewModel
 import com.app.gyros.Sensors.Utils.SensorViewModel
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert.assertFalse
@@ -87,9 +88,11 @@ class AccelerometerTest {
         val mockSensorManager = mockk<SensorManager>()
         val mockSensor = mockk<Sensor>()
 
-        every { mockSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) } returns mockSensor
-
         val accelerometer = Accelerometer(mockSensorManager)
+
+        every { mockSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) } returns mockSensor
+        every { mockSensorManager.registerListener(any(), mockSensor, SensorManager.SENSOR_DELAY_GAME) } returns true
+
         accelerometer.start()
 
         verify{
@@ -119,12 +122,14 @@ class AccelerometerTest {
     @Test
     fun `stop register listener`() {
         val mockSensorManager = mockk<SensorManager>()
-        val mockSensor = mockk<Sensor>()
 
         val accelerometer = Accelerometer(mockSensorManager)
 
-        verify {
-            mockSensorManager.unregisterListener(any<SensorEventListener>())
+        justRun { mockSensorManager.unregisterListener(accelerometer) }
+        accelerometer.stop()
+
+        verify(exactly = 1) {
+            mockSensorManager.unregisterListener(accelerometer)
         }
     }
 
@@ -133,12 +138,14 @@ class AccelerometerTest {
         val mockSensorManager = mockk<SensorManager>()
         val mockViewModel = mockk<SensorViewModel>(relaxed = true)
 
-        val accelerometter = Accelerometer(mockSensorManager)
-        val mockEvent = mockk<SensorEvent>()
+        val accelerometer = Accelerometer(mockSensorManager)
+        accelerometer.initializeViewModel(mockViewModel)
 
-        every { mockEvent.values } returns floatArrayOf(23.0f,54.0f,128.0f)
+        val mockEvent = mockk<SensorEvent>(relaxed = true)
 
-        accelerometter.onSensorChanged(mockEvent)
+        mockEvent.values =  floatArrayOf(23.0f,54.0f,128.0f)
+
+        accelerometer.onSensorChanged(mockEvent)
 
         verify {
             mockViewModel.updateValues(23.0f, 54.0f, 128.0f)
