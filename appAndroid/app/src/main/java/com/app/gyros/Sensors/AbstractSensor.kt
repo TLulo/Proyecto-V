@@ -14,8 +14,8 @@ abstract class AbstractSensor(protected val sensorManager: SensorManager): Senso
     /*
     Getter and Setter to attribute viewModel
      */
-    public fun getViewModel(): ViewModel{
-        return this.viewModel
+    public fun get_ViewModel(): SensorViewModel?{
+        return if (::viewModel.isInitialized) viewModel else null
     }
     public fun initializeViewModel(viewModel: SensorViewModel) {
         this.viewModel = viewModel
@@ -47,7 +47,9 @@ abstract class AbstractSensor(protected val sensorManager: SensorManager): Senso
     This function stop listen
      */
     fun stop(){
-        sensorManager.unregisterListener(this)
+        val sensor = hasTypeSensor()
+        if (sensor != null)
+            sensorManager.unregisterListener(this)
     }
 
     /*

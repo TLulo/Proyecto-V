@@ -79,7 +79,7 @@ class AccelerometerTest {
 
         accelerometer.initializeViewModel(mockViewModel)
 
-        assertEquals(accelerometer.getViewModel(),mockViewModel)
+        assertEquals(accelerometer.get_ViewModel(),mockViewModel)
     }
 
     @Test

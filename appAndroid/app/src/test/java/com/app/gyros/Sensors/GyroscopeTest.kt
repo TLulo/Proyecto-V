@@ -79,7 +79,7 @@ class GyroscopeTest {
 
         gyroscope.initializeViewModel(mockViewModel)
 
-        assertEquals(gyroscope.getViewModel(),mockViewModel)
+        assertEquals(gyroscope.get_ViewModel(),mockViewModel)
     }
 
     @Test
