@@ -4,7 +4,6 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import androidx.lifecycle.ViewModel
 import com.app.gyros.Sensors.Utils.SensorViewModel
 
 abstract class AbstractSensor(protected val sensorManager: SensorManager): SensorEventListener {
