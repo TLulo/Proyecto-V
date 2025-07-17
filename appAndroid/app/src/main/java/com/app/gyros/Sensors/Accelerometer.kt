@@ -4,10 +4,13 @@ import android.hardware.Sensor
 import android.hardware.SensorManager
 
 
-class Accelerometer(private val sensorManager: SensorManager) : AbstractSensor(){
+class Accelerometer(sensorMan: SensorManager) : AbstractSensor(sensorMan){
 
-    public override fun detectSensor(): Boolean {
-        return (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null)
+    public override fun hasTypeSensor(): Sensor? {
+        return (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER))
     }
 
+    public override fun detectSensor(): Boolean {
+        return (hasTypeSensor() != null)
+    }
 }
