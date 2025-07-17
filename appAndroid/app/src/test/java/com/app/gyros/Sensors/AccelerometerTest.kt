@@ -98,10 +98,17 @@ class AccelerometerTest {
             mockSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
             mockSensorManager.registerListener(any(),mockSensor,SensorManager.SENSOR_DELAY_GAME)
         }
+
+        justRun { mockSensorManager.unregisterListener(accelerometer) }
+        accelerometer.stop()
+
+        verify(exactly = 1) {
+            mockSensorManager.unregisterListener(accelerometer)
+        }
     }
 
     @Test
-    fun `start does not register listener when sensor does not exists`() {
+    fun `start and stop does not register listener when sensor does not exists`() {
         val mockSensorManager = mockk<SensorManager>()
 
         every { mockSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) } returns null
@@ -116,18 +123,9 @@ class AccelerometerTest {
         verify(exactly = 0) {
             mockSensorManager.registerListener(any<SensorEventListener>(),any<Sensor>(),any<Int>())
         }
-    }
-
-    @Test
-    fun `stop register listener`() {
-        val mockSensorManager = mockk<SensorManager>()
-
-        val accelerometer = Accelerometer(mockSensorManager)
-
-        justRun { mockSensorManager.unregisterListener(accelerometer) }
         accelerometer.stop()
 
-        verify(exactly = 1) {
+        verify(exactly = 0) {
             mockSensorManager.unregisterListener(accelerometer)
         }
     }

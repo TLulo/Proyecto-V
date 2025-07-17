@@ -9,7 +9,9 @@ import com.app.gyros.Sensors.Utils.SensorViewModel
 abstract class AbstractSensor(protected val sensorManager: SensorManager): SensorEventListener {
 //   Atributos Compartidos
     protected lateinit var viewModel : SensorViewModel
-//   Metodos compartidos
+    protected var sensor : Sensor? = null
+
+    //   Metodos compartidos
     /*
     Getter and Setter to attribute viewModel
      */
@@ -37,7 +39,7 @@ abstract class AbstractSensor(protected val sensorManager: SensorManager): Senso
     This function start listen
      */
     fun start(){
-        val sensor = hasTypeSensor()
+        sensor = hasTypeSensor()
         if (sensor != null)
             sensorManager.registerListener(this,sensor, SensorManager.SENSOR_DELAY_GAME)
     }
@@ -46,7 +48,6 @@ abstract class AbstractSensor(protected val sensorManager: SensorManager): Senso
     This function stop listen
      */
     fun stop(){
-        val sensor = hasTypeSensor()
         if (sensor != null)
             sensorManager.unregisterListener(this)
     }

@@ -83,7 +83,7 @@ class GyroscopeTest {
     }
 
     @Test
-    fun `start register listener  when sensor exists`() {
+    fun `start and stop register listener  when sensor exists`() {
         val mockSensorManager = mockk<SensorManager>()
         val mockSensor = mockk<Sensor>()
 
@@ -98,10 +98,17 @@ class GyroscopeTest {
             mockSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
             mockSensorManager.registerListener(any(),mockSensor,SensorManager.SENSOR_DELAY_GAME)
         }
+
+        justRun { mockSensorManager.unregisterListener(gyroscope) }
+        gyroscope.stop()
+
+        verify(exactly = 1) {
+            mockSensorManager.unregisterListener(gyroscope)
+        }
     }
 
     @Test
-    fun `start does not register listener when sensor does not exists`() {
+    fun `start and stop does not register listener when sensor does not exists`() {
         val mockSensorManager = mockk<SensorManager>()
 
         every { mockSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) } returns null
@@ -116,18 +123,9 @@ class GyroscopeTest {
         verify(exactly = 0) {
             mockSensorManager.registerListener(any<SensorEventListener>(),any<Sensor>(),any<Int>())
         }
-    }
-
-    @Test
-    fun `stop register listener`() {
-        val mockSensorManager = mockk<SensorManager>()
-
-        val gyroscope = Gyroscope(mockSensorManager)
-
-        justRun { mockSensorManager.unregisterListener(gyroscope) }
         gyroscope.stop()
 
-        verify(exactly = 1) {
+        verify(exactly = 0) {
             mockSensorManager.unregisterListener(gyroscope)
         }
     }
