@@ -1,6 +1,5 @@
 package com.app.gyros
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.hardware.SensorManager
 import android.os.Bundle
@@ -14,11 +13,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
@@ -101,7 +98,6 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun ShowMainSensor(){
-//        val currentSensor = remember { mutableStateOf(sensorUsed) }
         when (sensorUsed.value) {
             TypeSensor.ACCELEROMETER -> {
                 SensorScreen(sensorViewModel, accelerometer)
