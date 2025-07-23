@@ -35,8 +35,8 @@ import com.app.gyros.Sensors.Gyroscope
 import com.app.gyros.Sensors.Utils.SensorViewModel
 import com.app.gyros.ui.theme.GyrosTheme
 
-enum class TypeSensor{
-    ACCELEROMETER,GYROSCOPE
+enum class TypeSensor {
+    ACCELEROMETER, GYROSCOPE
 }
 class MainActivity : ComponentActivity() {
     private lateinit var accelerometer: Accelerometer
@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
                                 .fillMaxWidth(),
                             contentAlignment = Alignment.TopEnd
                         ){
-                            MinimalDropdownMenu()
+                            ConfigMenu()
                         }
                         Box(
                             modifier = Modifier
@@ -109,7 +109,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun MinimalDropdownMenu() {
+    fun ConfigMenu() {
         var expanded by remember { mutableStateOf(false) }
         Box(
             modifier = Modifier
@@ -124,13 +124,16 @@ class MainActivity : ComponentActivity() {
             ) {
                 DropdownMenuItem(
                     text = { Text("Change Sensor") },
-                    onClick = { ChangeSensor() }
+                    onClick = {
+                        ChangeSensor()
+                        expanded = false
+                    }
                 )
             }
         }
     }
 
-    fun ChangeSensor(){
+    fun ChangeSensor() {
         when(sensorUsed.value){
             TypeSensor.GYROSCOPE -> sensorUsed.value = TypeSensor.ACCELEROMETER
             TypeSensor.ACCELEROMETER -> sensorUsed.value = TypeSensor.GYROSCOPE
@@ -152,7 +155,7 @@ fun SensorScreen(viewModel: SensorViewModel, sensor: AbstractSensor) {
             Text("Y: $y")
             Text("Z: $z")
         }else{
-            Text("Your device does not has the required Sensor")
+            Text("Your device does not have the required Sensor")
         }
     }
 }
