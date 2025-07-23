@@ -39,14 +39,14 @@ import com.app.gyros.Sensors.Utils.SensorViewModel
 import com.app.gyros.ui.theme.GyrosTheme
 
 enum class TypeSensor {
-    ACCELEROMETER, GYROSCOPE
+    ACCELEROMETER, GYROSCOPE, NULL
 }
 class MainActivity : ComponentActivity() {
     private lateinit var accelerometer: Accelerometer
     private lateinit var gyroscope: Gyroscope
     private val sensorViewModel : SensorViewModel by viewModels()
 
-    private var sensorUsed = mutableStateOf(TypeSensor.ACCELEROMETER)
+    private var sensorUsed = mutableStateOf(TypeSensor.NULL)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,7 +106,7 @@ class MainActivity : ComponentActivity() {
 
         if (showDialog.value) {
             AlertDialog(
-                onDismissRequest = { showDialog.value = false },
+                onDismissRequest = { showDialog.value = true },
                 title = { Text("Choose a Sensor") },
                 text = { Text("you can change it later.") },
                 confirmButton = {
@@ -137,6 +137,7 @@ class MainActivity : ComponentActivity() {
             TypeSensor.GYROSCOPE -> {
                 SensorScreen(sensorViewModel, gyroscope)
             }
+            else -> {}
         }
     }
 
@@ -169,6 +170,7 @@ class MainActivity : ComponentActivity() {
         when(sensorUsed.value){
             TypeSensor.GYROSCOPE -> sensorUsed.value = TypeSensor.ACCELEROMETER
             TypeSensor.ACCELEROMETER -> sensorUsed.value = TypeSensor.GYROSCOPE
+            else -> {}
         }
     }
 }
