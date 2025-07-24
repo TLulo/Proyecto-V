@@ -105,9 +105,9 @@ class MainActivity : ComponentActivity() {
 
         if (showDialog.value) {
             AlertDialog(
-                onDismissRequest = { showDialog.value = true },
+                onDismissRequest = { },
                 title = { Text("Choose a Sensor") },
-                text = { Text("you can change it later.") },
+                text = { Text("You can change it later.") },
                 confirmButton = {
                     TextButton(onClick = {
                         showDialog.value = false
