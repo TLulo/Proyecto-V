@@ -14,12 +14,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,14 +38,14 @@ import com.app.gyros.Sensors.Utils.SensorViewModel
 import com.app.gyros.ui.theme.GyrosTheme
 
 enum class TypeSensor {
-    ACCELEROMETER, GYROSCOPE
+    ACCELEROMETER, GYROSCOPE, NULL
 }
 class MainActivity : ComponentActivity() {
     private lateinit var accelerometer: Accelerometer
     private lateinit var gyroscope: Gyroscope
     private val sensorViewModel : SensorViewModel by viewModels()
 
-    private var sensorUsed = mutableStateOf(TypeSensor.ACCELEROMETER)
+    private var sensorUsed = mutableStateOf(TypeSensor.NULL)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,6 +78,7 @@ class MainActivity : ComponentActivity() {
                                 .fillMaxWidth(),
                             contentAlignment = Alignment.Center
                         ) {
+                            ChoseFirstSensor()
                             ShowMainSensor()
                         }
                     }
@@ -97,6 +100,34 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
+    fun ChoseFirstSensor(){
+        val showDialog = remember { mutableStateOf(true) }
+
+        if (showDialog.value) {
+            AlertDialog(
+                onDismissRequest = { },
+                title = { Text("Choose a Sensor") },
+                text = { Text("You can change it later.") },
+                confirmButton = {
+                    TextButton(onClick = {
+                        showDialog.value = false
+                        sensorUsed.value = TypeSensor.ACCELEROMETER
+                    }) {
+                        Text("ACCELEROMETER")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = {
+                        showDialog.value = false
+                        sensorUsed.value = TypeSensor.GYROSCOPE
+                    }) {
+                        Text("GYROSCOPE")
+                    }
+                }
+            )
+        }
+    }
+    @Composable
     fun ShowMainSensor(){
         when (sensorUsed.value) {
             TypeSensor.ACCELEROMETER -> {
@@ -105,6 +136,7 @@ class MainActivity : ComponentActivity() {
             TypeSensor.GYROSCOPE -> {
                 SensorScreen(sensorViewModel, gyroscope)
             }
+            else -> {}
         }
     }
 
@@ -137,6 +169,7 @@ class MainActivity : ComponentActivity() {
         when(sensorUsed.value){
             TypeSensor.GYROSCOPE -> sensorUsed.value = TypeSensor.ACCELEROMETER
             TypeSensor.ACCELEROMETER -> sensorUsed.value = TypeSensor.GYROSCOPE
+            else -> {}
         }
     }
 }
