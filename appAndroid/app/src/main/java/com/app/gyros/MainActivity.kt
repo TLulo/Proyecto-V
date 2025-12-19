@@ -23,6 +23,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,28 +35,28 @@ import androidx.compose.ui.unit.dp
 import com.app.gyros.Sensors.AbstractSensor
 import com.app.gyros.Sensors.Accelerometer
 import com.app.gyros.Sensors.Gyroscope
+import com.app.gyros.Sensors.Utils.SensorController
 import com.app.gyros.Sensors.Utils.SensorViewModel
+import com.app.gyros.Sensors.Utils.SensorViewModelFactory
 import com.app.gyros.ui.theme.GyrosTheme
 
 enum class TypeSensor {
     ACCELEROMETER, GYROSCOPE, NULL
 }
 class MainActivity : ComponentActivity() {
-    private lateinit var accelerometer: Accelerometer
-    private lateinit var gyroscope: Gyroscope
-    private val sensorViewModel : SensorViewModel by viewModels()
+//    private lateinit var accelerometer: Accelerometer
+//    private lateinit var gyroscope: Gyroscope
+    private val sensorViewModel : SensorViewModel by viewModels(){
+        SensorViewModelFactory(this)
+    }
 
-    private var sensorUsed = mutableStateOf(TypeSensor.NULL)
+    private var sensorUsed = mutableStateOf(TypeSensor.NULL)//Quitar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        accelerometer = Accelerometer(sensorManager)
-        accelerometer.initializeViewModel(sensorViewModel)
-
-        gyroscope = Gyroscope(sensorManager)
-        gyroscope.initializeViewModel(sensorViewModel)
+//        gyroscope = Gyroscope(sensorManager)
+//        gyroscope.initializeViewModel(sensorViewModel)
 
         setContent {
             GyrosTheme {
@@ -89,14 +90,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        accelerometer.start()
-        gyroscope.start()
+        sensorViewModel.onResume()
     }
 
     override fun onStop() {
         super.onStop()
-        accelerometer.stop()
-        gyroscope.stop()
+        sensorViewModel.onStop()
     }
 
     @Composable
@@ -131,10 +130,10 @@ class MainActivity : ComponentActivity() {
     fun ShowMainSensor(){
         when (sensorUsed.value) {
             TypeSensor.ACCELEROMETER -> {
-                SensorScreen(sensorViewModel, accelerometer)
+                SensorScreen(sensorViewModel)
             }
             TypeSensor.GYROSCOPE -> {
-                SensorScreen(sensorViewModel, gyroscope)
+                SensorScreen(sensorViewModel)
             }
             else -> {}
         }
@@ -174,19 +173,20 @@ class MainActivity : ComponentActivity() {
     }
 }
 @Composable
-fun SensorScreen(viewModel: SensorViewModel, sensor: AbstractSensor) {
-    val (x, y, z) = viewModel.SensorValues
+fun SensorScreen(viewModel: SensorViewModel) {
+    val values by viewModel.sensorValues.collectAsState()
+    val hasSensor by viewModel.hasSensor.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (sensor.detectSensor()){
+        if (hasSensor){
             Text("Sensor:")
-            Text("X: $x")
-            Text("Y: $y")
-            Text("Z: $z")
+            Text("X: ${values.first}")
+            Text("Y: ${values.second}")
+            Text("Z: ${values.third}")
         }else{
             Text("Your device does not have the required Sensor")
         }

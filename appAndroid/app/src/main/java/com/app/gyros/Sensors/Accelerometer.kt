@@ -10,7 +10,7 @@ class Accelerometer(sensorMan: SensorManager) : AbstractSensor(sensorMan){
         return (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER))
     }
 
-    public override fun detectSensor(): Boolean {
+    public override fun hasSensor(): Boolean {
         return (hasTypeSensor() != null)
     }
 }

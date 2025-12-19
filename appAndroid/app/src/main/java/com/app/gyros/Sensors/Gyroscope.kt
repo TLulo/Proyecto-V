@@ -5,7 +5,7 @@ import android.hardware.SensorManager
 
 class Gyroscope(protected val sensorMan: SensorManager): AbstractSensor(sensorMan) {
 
-    override fun detectSensor(): Boolean {
+    override fun hasSensor(): Boolean {
         return ( hasTypeSensor() != null)
     }
 

@@ -26,7 +26,7 @@ abstract class AbstractSensor(protected val sensorManager: SensorManager): Senso
     This function detect if device has Sensor
     return True if has and False else
      */
-    public abstract fun detectSensor(): Boolean
+    public abstract fun hasSensor(): Boolean
 
     /*
     This function return value of Sensor
