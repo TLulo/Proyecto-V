@@ -20,6 +20,7 @@ class SensorViewModel(val senController: SensorController) : ViewModel() {
     }
 
     init {
+        senController.bindValues(this)
         hasSensor()
     }
 

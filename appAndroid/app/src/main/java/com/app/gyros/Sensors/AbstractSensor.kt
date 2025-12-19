@@ -10,6 +10,7 @@ abstract class AbstractSensor(protected val sensorManager: SensorManager): Senso
 //   Atributos Compartidos
     protected lateinit var viewModel : SensorViewModel
     protected var sensor : Sensor? = null
+    var onValuesChanged: ((Triple<Float, Float, Float>) -> Unit)? = null
 
     //   Metodos compartidos
     /*
@@ -69,7 +70,7 @@ abstract class AbstractSensor(protected val sensorManager: SensorManager): Senso
     override fun onSensorChanged(event: SensorEvent?){
         if (event != null){
             val processedValues = processorSensorValues(event.values)
-            viewModel.updateValues(processedValues.first,processedValues.second,processedValues.third)
+            onValuesChanged?.invoke(processedValues)
         }
     }
 
