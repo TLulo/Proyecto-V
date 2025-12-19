@@ -184,9 +184,9 @@ fun SensorScreen(viewModel: SensorViewModel) {
     ) {
         if (hasSensor){
             Text("Sensor:")
-            Text("X: ${values.first}")
-            Text("Y: ${values.second}")
-            Text("Z: ${values.third}")
+            Text("X: ${values.x}")
+            Text("Y: ${values.y}")
+            Text("Z: ${values.z}")
         }else{
             Text("Your device does not have the required Sensor")
         }

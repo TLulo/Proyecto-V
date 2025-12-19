@@ -4,13 +4,14 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import com.app.gyros.Sensors.Utils.SensorCoords
 import com.app.gyros.Sensors.Utils.SensorViewModel
 
 abstract class AbstractSensor(protected val sensorManager: SensorManager): SensorEventListener {
 //   Atributos Compartidos
     protected lateinit var viewModel : SensorViewModel
     protected var sensor : Sensor? = null
-    var onValuesChanged: ((Triple<Float, Float, Float>) -> Unit)? = null
+    var onValuesChanged: ((SensorCoords) -> Unit)? = null
 
     //   Metodos compartidos
     /*
@@ -56,11 +57,11 @@ abstract class AbstractSensor(protected val sensorManager: SensorManager): Senso
     /*
     Business logic to process sensor values
     */
-    protected fun processorSensorValues(values : FloatArray): Triple<Float, Float, Float>{
+    protected fun processorSensorValues(values : FloatArray): SensorCoords{
         val x = values.getOrNull(0) ?: 0f
         val y = values.getOrNull(1) ?: 0f
         val z = values.getOrNull(2) ?: 0f
-        return Triple(x,y,z)
+        return SensorCoords(x,y,z)
     }
 
     /*
