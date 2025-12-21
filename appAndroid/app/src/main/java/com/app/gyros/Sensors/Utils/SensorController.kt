@@ -1,16 +1,42 @@
 package com.app.gyros.Sensors.Utils
 
+import com.app.gyros.Sensors.AbstractSensor
 import com.app.gyros.Sensors.Accelerometer
+import com.app.gyros.Sensors.Gyroscope
+import com.app.gyros.TypeSensor
 
-class SensorController(private val sensor: Accelerometer) {
+class SensorController(private val accelerometer: Accelerometer, private val gyroscope: Gyroscope) {
+    private var currentSensor : AbstractSensor = accelerometer
+
+    fun changeSensor() {
+        currentSensor.stop()
+
+        currentSensor = when (currentSensor){
+            accelerometer -> gyroscope
+            gyroscope -> accelerometer
+            else -> accelerometer
+        }
+        currentSensor.start()
+    }
+
+    fun chooseFirstSensor(choice : SensorType){
+        currentSensor.stop()
+
+        if (choice == SensorType.ACCELEROMETTER){
+            currentSensor = accelerometer
+        }else if (choice == SensorType.GYROSCOPE) {
+            currentSensor = gyroscope
+        }
+        currentSensor.start()
+    }
 
     fun bindValues(viewModel: SensorViewModel){
-        sensor.onValuesChanged = { (x,y,z) -> viewModel.updateValues(x,y,z)}
+        currentSensor.onValuesChanged = { (x,y,z) -> viewModel.updateValues(x,y,z)}
     }
     fun hasSensor(): Boolean{
-        return sensor.hasSensor()
+        return currentSensor.hasSensor()
     }
-    fun start() = sensor.start()
-    fun stop() = sensor.stop()
+    fun start() = currentSensor.start()
+    fun stop() = currentSensor.stop()
 
 }

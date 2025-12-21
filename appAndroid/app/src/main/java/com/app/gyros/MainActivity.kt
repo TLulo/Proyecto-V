@@ -36,6 +36,7 @@ import com.app.gyros.Sensors.AbstractSensor
 import com.app.gyros.Sensors.Accelerometer
 import com.app.gyros.Sensors.Gyroscope
 import com.app.gyros.Sensors.Utils.SensorController
+import com.app.gyros.Sensors.Utils.SensorType
 import com.app.gyros.Sensors.Utils.SensorViewModel
 import com.app.gyros.Sensors.Utils.SensorViewModelFactory
 import com.app.gyros.ui.theme.GyrosTheme
@@ -44,19 +45,12 @@ enum class TypeSensor {
     ACCELEROMETER, GYROSCOPE, NULL
 }
 class MainActivity : ComponentActivity() {
-//    private lateinit var accelerometer: Accelerometer
-//    private lateinit var gyroscope: Gyroscope
     private val sensorViewModel : SensorViewModel by viewModels(){
         SensorViewModelFactory(this)
     }
 
-    private var sensorUsed = mutableStateOf(TypeSensor.NULL)//Quitar
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-//        gyroscope = Gyroscope(sensorManager)
-//        gyroscope.initializeViewModel(sensorViewModel)
 
         setContent {
             GyrosTheme {
@@ -88,16 +82,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        sensorViewModel.onResume()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        sensorViewModel.onStop()
-    }
-
     @Composable
     fun ChoseFirstSensor(){
         val showDialog = remember { mutableStateOf(true) }
@@ -110,7 +94,7 @@ class MainActivity : ComponentActivity() {
                 confirmButton = {
                     TextButton(onClick = {
                         showDialog.value = false
-                        sensorUsed.value = TypeSensor.ACCELEROMETER
+                        sensorViewModel.chooseFirstSensor(SensorType.ACCELEROMETTER)
                     }) {
                         Text("ACCELEROMETER")
                     }
@@ -118,7 +102,7 @@ class MainActivity : ComponentActivity() {
                 dismissButton = {
                     TextButton(onClick = {
                         showDialog.value = false
-                        sensorUsed.value = TypeSensor.GYROSCOPE
+                        sensorViewModel.chooseFirstSensor(SensorType.GYROSCOPE)
                     }) {
                         Text("GYROSCOPE")
                     }
@@ -128,15 +112,7 @@ class MainActivity : ComponentActivity() {
     }
     @Composable
     fun ShowMainSensor(){
-        when (sensorUsed.value) {
-            TypeSensor.ACCELEROMETER -> {
-                SensorScreen(sensorViewModel)
-            }
-            TypeSensor.GYROSCOPE -> {
-                SensorScreen(sensorViewModel)
-            }
-            else -> {}
-        }
+        SensorScreen(sensorViewModel)
     }
 
     @Composable
@@ -156,7 +132,7 @@ class MainActivity : ComponentActivity() {
                 DropdownMenuItem(
                     text = { Text("Change Sensor") },
                     onClick = {
-                        ChangeSensor()
+                        sensorViewModel.changeSensor()
                         expanded = false
                     }
                 )
@@ -164,18 +140,23 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun ChangeSensor() {
-        when(sensorUsed.value){
-            TypeSensor.GYROSCOPE -> sensorUsed.value = TypeSensor.ACCELEROMETER
-            TypeSensor.ACCELEROMETER -> sensorUsed.value = TypeSensor.GYROSCOPE
-            else -> {}
-        }
+    override fun onResume() {
+        super.onResume()
+        sensorViewModel.onResume()
     }
+
+    override fun onStop() {
+        super.onStop()
+        sensorViewModel.onStop()
+    }
+
 }
+
+
 @Composable
-fun SensorScreen(viewModel: SensorViewModel) {
-    val values by viewModel.sensorValues.collectAsState()
-    val hasSensor by viewModel.hasSensor.collectAsState()
+fun SensorScreen(sensorViewModel : SensorViewModel) {
+    val values by sensorViewModel.sensorValues.collectAsState()
+    val hasSensor by sensorViewModel.hasSensor.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),

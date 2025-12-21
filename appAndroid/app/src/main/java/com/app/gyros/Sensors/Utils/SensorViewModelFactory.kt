@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.app.gyros.Sensors.AbstractSensor
 import com.app.gyros.Sensors.Accelerometer
+import com.app.gyros.Sensors.Gyroscope
 
 class SensorViewModelFactory(
     private val context: Context
@@ -13,12 +14,14 @@ class SensorViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>) : T {
         val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
-        val sensor = Accelerometer(sensorManager)
+        val accelerometer = Accelerometer(sensorManager)
+        val gyroscope = Gyroscope(sensorManager)
 
-        val controller = SensorController(sensor)
+        val controller = SensorController(accelerometer,gyroscope)
         val viewModel = SensorViewModel(controller)
 
-        sensor.initializeViewModel(viewModel)
+        accelerometer.initializeViewModel(viewModel)
+        gyroscope.initializeViewModel(viewModel)
 
         return viewModel as T
     }
