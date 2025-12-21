@@ -3,7 +3,6 @@ package com.app.gyros.Sensors.Utils
 import com.app.gyros.Sensors.AbstractSensor
 import com.app.gyros.Sensors.Accelerometer
 import com.app.gyros.Sensors.Gyroscope
-import com.app.gyros.TypeSensor
 
 class SensorController(private val accelerometer: Accelerometer, private val gyroscope: Gyroscope) {
     private var currentSensor : AbstractSensor = accelerometer
