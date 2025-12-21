@@ -4,7 +4,6 @@ import android.content.Context
 import android.hardware.SensorManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.app.gyros.Sensors.AbstractSensor
 import com.app.gyros.Sensors.Accelerometer
 import com.app.gyros.Sensors.Gyroscope
 
