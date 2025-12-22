@@ -9,20 +9,10 @@ import com.app.gyros.Sensors.Utils.SensorViewModel
 
 abstract class AbstractSensor(protected val sensorManager: SensorManager): SensorEventListener {
 //   Atributos Compartidos
-    protected lateinit var viewModel : SensorViewModel
     protected var sensor : Sensor? = null
     var onValuesChanged: ((SensorCoords) -> Unit)? = null
 
     //   Metodos compartidos
-    /*
-    Getter and Setter to attribute viewModel
-     */
-    public fun get_ViewModel(): SensorViewModel?{
-        return if (::viewModel.isInitialized) viewModel else null
-    }
-    public fun initializeViewModel(viewModel: SensorViewModel) {
-        this.viewModel = viewModel
-    }
 
     /*
     This function detect if device has Sensor

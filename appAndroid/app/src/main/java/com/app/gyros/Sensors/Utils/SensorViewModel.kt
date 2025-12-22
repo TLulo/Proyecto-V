@@ -5,16 +5,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class SensorViewModel(val senController: SensorController) : ViewModel() {
+class SensorViewModel(private val senController: SensorController) : ViewModel() {
 
     private val _sensorValues = MutableStateFlow(SensorCoords())
     val sensorValues : StateFlow<SensorCoords> = _sensorValues.asStateFlow()
 
     private val _hasSensor = MutableStateFlow(false)
-    val hasSensor: StateFlow<Boolean> = _hasSensor
+    val hasSensor: StateFlow<Boolean> = _hasSensor.asStateFlow()
 
     fun updateValues(x: Float, y: Float, z: Float) {
-        _sensorValues.value = SensorCoords(x,y,z)
+        _sensorValues.value = SensorCoords(x, y, z)
     }
 
     fun changeSensor(){

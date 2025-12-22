@@ -16,12 +16,13 @@ class SensorViewModelFactory(
         val accelerometer = Accelerometer(sensorManager)
         val gyroscope = Gyroscope(sensorManager)
 
-        val controller = SensorController(accelerometer,gyroscope)
+        val controller = SensorController(accelerometer, gyroscope)
         val viewModel = SensorViewModel(controller)
 
-        accelerometer.initializeViewModel(viewModel)
-        gyroscope.initializeViewModel(viewModel)
-
-        return viewModel as T
+        if (modelClass.isAssignableFrom(SensorViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return viewModel as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }
 }

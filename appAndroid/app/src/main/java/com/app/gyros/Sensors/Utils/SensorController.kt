@@ -21,7 +21,7 @@ class SensorController(private val accelerometer: Accelerometer, private val gyr
     fun chooseFirstSensor(choice : SensorType){
         currentSensor.stop()
 
-        if (choice == SensorType.ACCELEROMETTER){
+        if (choice == SensorType.ACCELEROMETER){
             currentSensor = accelerometer
         }else if (choice == SensorType.GYROSCOPE) {
             currentSensor = gyroscope
@@ -30,7 +30,7 @@ class SensorController(private val accelerometer: Accelerometer, private val gyr
     }
 
     fun bindValues(viewModel: SensorViewModel){
-        currentSensor.onValuesChanged = { (x,y,z) -> viewModel.updateValues(x,y,z)}
+        currentSensor.onValuesChanged = { (x, y, z) -> viewModel.updateValues(x, y, z)}
     }
     fun hasSensor(): Boolean{
         return currentSensor.hasSensor()

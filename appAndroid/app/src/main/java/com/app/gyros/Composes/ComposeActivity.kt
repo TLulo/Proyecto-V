@@ -86,7 +86,7 @@ class ComposeActivity {
                 confirmButton = {
                     TextButton(onClick = {
                         showDialog.value = false
-                        sensorViewModel.chooseFirstSensor(SensorType.ACCELEROMETTER)
+                        sensorViewModel.chooseFirstSensor(SensorType.ACCELEROMETER)
                     }) {
                         Text("ACCELEROMETER")
                     }
